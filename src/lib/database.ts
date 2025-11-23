@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase } from './supabase';
 
 export interface Payment {
   id: string;
@@ -16,18 +16,9 @@ export interface Payment {
   pdf_sent_whatsapp?: boolean;
 }
 
-// Verificar se Supabase está configurado antes de usar
-const checkSupabase = () => {
-  if (!isSupabaseConfigured() || !supabase) {
-    throw new Error('Supabase não está configurado. Configure as variáveis de ambiente NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY.');
-  }
-  return supabase;
-};
-
 export const paymentsDB = {
   create: async (payment: Omit<Payment, 'id' | 'created_at'>) => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .insert([payment])
       .select()
@@ -42,8 +33,7 @@ export const paymentsDB = {
   },
 
   findById: async (id: string): Promise<Payment | null> => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .select('*')
       .eq('id', id)
@@ -58,8 +48,7 @@ export const paymentsDB = {
   },
 
   findByUserId: async (userId: string): Promise<Payment[]> => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .select('*')
       .eq('user_id', userId)
@@ -74,8 +63,7 @@ export const paymentsDB = {
   },
 
   findByPaymentIntent: async (paymentIntentId: string): Promise<Payment | null> => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .select('*')
       .eq('payment_intent_id', paymentIntentId)
@@ -90,8 +78,7 @@ export const paymentsDB = {
   },
 
   update: async (id: string, updates: Partial<Payment>) => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .update(updates)
       .eq('id', id)
@@ -116,8 +103,7 @@ export const paymentsDB = {
 
   // Métodos adicionais úteis
   findByStatus: async (status: 'pending' | 'completed' | 'failed'): Promise<Payment[]> => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .select('*')
       .eq('status', status)
@@ -132,8 +118,7 @@ export const paymentsDB = {
   },
 
   getAll: async (): Promise<Payment[]> => {
-    const client = checkSupabase();
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('payments')
       .select('*')
       .order('created_at', { ascending: false });

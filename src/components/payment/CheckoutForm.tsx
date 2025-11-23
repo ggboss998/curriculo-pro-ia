@@ -34,45 +34,26 @@ export function CheckoutForm({ resumeData, onSuccess }: CheckoutFormProps) {
         return;
       }
 
-      // Preparar payload com todos os dados
-      const payload = {
-        amount: 999, // €9.99 em centavos
-        customerName: formData.name,
-        customerEmail: formData.email,
-        customerPhone: formData.phone,
-        customerBirthDate: formData.birthDate,
-        resumeData,
-      };
-
-      console.log("Enviando payload:", payload);
-
       // Criar Payment Intent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: 999,
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerBirthDate: formData.birthDate,
+          resumeData,
+        }),
       });
 
-      console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers);
-
-      // Verificar se a resposta é JSON
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const textResponse = await response.text();
-        console.error("Resposta não é JSON:", textResponse);
-        throw new Error("Servidor retornou resposta inválida (não é JSON). Verifique os logs do servidor.");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erro ao processar pagamento");
       }
 
       const data = await response.json();
-      console.log("Response data:", data);
-
-      if (!response.ok) {
-        throw new Error(data.error || `Erro HTTP ${response.status}`);
-      }
       
       // Verificar se há warning (erro no DB mas pagamento criado)
       if (data.warning) {
@@ -82,14 +63,8 @@ export function CheckoutForm({ resumeData, onSuccess }: CheckoutFormProps) {
       const { clientSecret, orderId } = data;
 
       if (!clientSecret) {
-        throw new Error("Erro ao obter dados de pagamento (clientSecret ausente)");
+        throw new Error("Erro ao obter dados de pagamento");
       }
-
-      if (!orderId) {
-        throw new Error("Erro ao obter ID do pedido");
-      }
-
-      console.log("Payment Intent criado com sucesso:", { clientSecret, orderId });
 
       // Simular pagamento bem-sucedido (em produção, use Stripe Elements)
       // Aguardar 2 segundos para simular processamento
@@ -98,16 +73,12 @@ export function CheckoutForm({ resumeData, onSuccess }: CheckoutFormProps) {
       // Verificar se o pagamento foi processado
       const verifyResponse = await fetch("/api/verify-payment", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orderId }),
       });
 
       if (!verifyResponse.ok) {
-        const verifyError = await verifyResponse.json();
-        throw new Error(verifyError.error || "Erro ao verificar pagamento");
+        throw new Error("Erro ao verificar pagamento");
       }
 
       const verifyData = await verifyResponse.json();
@@ -124,9 +95,9 @@ export function CheckoutForm({ resumeData, onSuccess }: CheckoutFormProps) {
         throw new Error("Pagamento não foi confirmado");
       }
     } catch (error) {
-      console.error("Erro completo:", error);
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido ao processar pagamento";
-      toast.error(`Erro: ${errorMessage}`);
+      console.error("Erro:", error);
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error(`Erro ao processar pagamento: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
