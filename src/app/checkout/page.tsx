@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { ArrowLeft, Download, Mail, MessageCircle } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ResumePreview } from "@/components/builder/ResumePreview";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const [resumeData, setResumeData] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -26,6 +27,10 @@ export default function CheckoutPage() {
       console.warn("⚠️ Nenhum dado encontrado no localStorage");
     }
   }, []);
+
+  const handleGoBack = () => {
+    router.back();
+  };
 
   const handleDownloadPDF = async () => {
     console.log("🎯 BOTÃO CLICADO - Iniciando geração de PDF");
@@ -169,12 +174,10 @@ export default function CheckoutPage() {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Carregando dados do currículo...
           </p>
-          <Link href="/builder">
-            <Button variant="outline">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar ao Editor
-            </Button>
-          </Link>
+          <Button variant="outline" onClick={handleGoBack}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
         </div>
       </div>
     );
@@ -186,13 +189,13 @@ export default function CheckoutPage() {
       <header className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <Link
-              href="/builder"
+            <button
+              onClick={handleGoBack}
               className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Voltar ao Editor</span>
-            </Link>
+              <span>Voltar</span>
+            </button>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">
               Seu Currículo Está Pronto!
             </h1>
@@ -291,11 +294,10 @@ export default function CheckoutPage() {
         </Card>
 
         <div className="text-center">
-          <Link href="/">
-            <Button variant="outline" size="lg">
-              Voltar ao Início
-            </Button>
-          </Link>
+          <Button variant="outline" size="lg" onClick={handleGoBack}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
         </div>
       </div>
     </div>
