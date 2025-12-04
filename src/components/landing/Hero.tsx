@@ -70,29 +70,15 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Social Proof com fotos aleatórias de pessoas */}
+          {/* Social Proof */}
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex -space-x-2">
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-                alt="Profissional"
-                className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-950 object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
-                alt="Profissional"
-                className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-950 object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
-                alt="Profissional"
-                className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-950 object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
-                alt="Profissional"
-                className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-950 object-cover"
-              />
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 border-2 border-white dark:border-gray-950"
+                />
+              ))}
             </div>
             <p>
               <span className="font-semibold text-gray-900 dark:text-white">500+</span> profissionais já criaram o seu currículo

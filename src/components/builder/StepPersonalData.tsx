@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User, Mail, Phone, MapPin, Upload, Move, Calendar } from "lucide-react";
+import { User, Mail, Phone, MapPin, Upload, Move } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 
@@ -13,7 +13,6 @@ interface PersonalData {
   location: string;
   photo: string;
   photoPosition: { x: number; y: number };
-  birthDate?: string;
 }
 
 interface StepPersonalDataProps {
@@ -158,21 +157,6 @@ export function StepPersonalData({ data, onChange }: StepPersonalDataProps) {
           placeholder="Ex: João Silva"
           value={data.name}
           onChange={(e) => handleChange("name", e.target.value)}
-          className="text-base"
-        />
-      </div>
-
-      {/* Birth Date */}
-      <div className="space-y-2">
-        <Label htmlFor="birthDate" className="flex items-center gap-2">
-          <Calendar className="w-4 h-4" />
-          Data de Nascimento
-        </Label>
-        <Input
-          id="birthDate"
-          type="date"
-          value={data.birthDate || ""}
-          onChange={(e) => handleChange("birthDate", e.target.value)}
           className="text-base"
         />
       </div>

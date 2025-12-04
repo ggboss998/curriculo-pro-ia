@@ -35,7 +35,6 @@ export default function BuilderPage() {
       location: "",
       photo: "",
       photoPosition: { x: 50, y: 50 },
-      birthDate: "",
     },
     presentation: "",
     experience: [],
@@ -54,15 +53,11 @@ export default function BuilderPage() {
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     } else {
-      handleDownload();
+      // Salvar dados no localStorage antes de ir para checkout
+      localStorage.setItem("resumeData", JSON.stringify(resumeData));
+      // Ir para página de pagamento
+      window.location.href = "/checkout";
     }
-  };
-
-  const handleDownload = () => {
-    // Salvar dados no localStorage antes de ir para checkout
-    localStorage.setItem("resumeData", JSON.stringify(resumeData));
-    // Ir para página de pagamento
-    window.location.href = "/checkout";
   };
 
   const prevStep = () => {
@@ -239,7 +234,7 @@ export default function BuilderPage() {
               >
                 {currentStep === steps.length ? (
                   <>
-                    Baixar PDF (€9.99)
+                    Finalizar
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 ) : (

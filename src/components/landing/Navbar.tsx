@@ -36,6 +36,12 @@ export function Navbar() {
             <Link href="#beneficios" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Benefícios
             </Link>
+            <Link href="#preco" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Preço
+            </Link>
+            <Link href="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Entrar
+            </Link>
             
             <button
               onClick={toggleTheme}
@@ -85,6 +91,20 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               Benefícios
+            </Link>
+            <Link
+              href="#preco"
+              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Preço
+            </Link>
+            <Link
+              href="/dashboard"
+              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Entrar
             </Link>
             <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-purple-600">
               <Link href="/builder">Começar Agora</Link>
